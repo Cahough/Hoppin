@@ -264,19 +264,19 @@ public:
     virtual void handleEvent(SDL_Event &event) = 0;
 };
 
-class CartersGame:public Game
+class HoppinGame:public Game
 {
-    Animation a;
+    Animation background;
     Sprite us;
     vector<BounceSprite> npcs;
     int x, y;
     int dx, dy;
 public:
-    void init(const char *gameName = "Carter's Game", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
+    void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
     {
         Game::init(gameName);
-        a.addFrame(new AnimationFrame(ren, "Img/hello.bmp"));
-        a.addFrame(new AnimationFrame(ren, "Img/hello1.bmp", 500));
+        background.addFrame(new AnimationFrame(ren, "Img/hello.bmp"));
+        background.addFrame(new AnimationFrame(ren, "Img/hello1.bmp", 500));
         us.addFrames(ren, "Img/Big Planets/planet", 8);
         us.set(0.0, 0.0);
         for (int i = 0; i < 100; i++)
@@ -290,7 +290,7 @@ public:
     
     void show()
     {
-        a.show(ren, ticks);
+        background.show(ren, ticks);
         for (unsigned int i = 0; i < npcs.size(); i++)
         {
             npcs[i].show(ren, ticks);
@@ -311,14 +311,14 @@ public:
     
     void done()
     {
-        a.destroy();
+        background.destroy();
         Game::done();
     }
 };
 
 int main(int argc, char **argv)
 {
-    CartersGame g;
+    HoppinGame g;
     g.init();
     g.run();
     g.done();
