@@ -286,6 +286,7 @@ public:
             s.set(rand()%maxW, rand()%maxH, rand()%20-10, rand()%20-10, 0.0, 10.0);
             npcs.push_back(s);
         }
+
     }
     
     void show()
@@ -316,11 +317,60 @@ public:
     }
 };
 
+
+
+class StartGame:public Game
+{
+    Animation background;
+public:
+    void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
+    {
+        Game::init(gameName);
+        background.addFrame(new AnimationFrame(ren, "Img/startscreen1.bmp", 500));
+        background.addFrame(new AnimationFrame(ren, "Img/startscreen2.bmp", 1000));
+    }
+    
+    void show()
+    {
+        background.show(ren, ticks);
+    }
+    
+    void handleEvent(SDL_Event &event)
+    {
+    }
+    
+    void done()
+    {
+        background.destroy();
+        Game::done();
+    }
+};
+
+
 int main(int argc, char **argv)
 {
+    StartGame s;
     HoppinGame g;
-    g.init();
-    g.run();
+    s.init();
+    s.run();
+    
+    SDL_Event event;
+    if (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_KEYDOWN)
+        {
+            if (event.key.keysym.sym == SDLK_SPACE)
+            {
+                s.done();
+                g.init();
+                g.run();
+            }
+        }
+    }
     g.done();
+
+//    g.init();
+//    g.run();
+//    g.done();
     return 0;
 }
