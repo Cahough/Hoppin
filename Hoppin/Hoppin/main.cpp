@@ -228,7 +228,7 @@ public:
         SDL_Quit();
     }
     
-    void run()
+    virtual void run()
     {
         int start = SDL_GetTicks();
         int oldTicks = start;
@@ -330,6 +330,38 @@ public:
         background.addFrame(new AnimationFrame(ren, "Img/startscreen2.bmp", 1000));
     }
     
+    void run()
+    {
+        int start = SDL_GetTicks();
+        int oldTicks = start;
+        finished = false;
+        while (!finished)
+        {
+            SDL_Event event;
+            if (SDL_PollEvent(&event))
+            {
+                if (event.type == SDL_WINDOWEVENT)
+                {
+                    if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                        finished = true;
+                }
+                if (event.type == SDL_KEYDOWN)
+                {
+                    finished = true;
+                }
+                if (!finished) handleEvent(event);
+            }
+            ticks = SDL_GetTicks();
+            dt = (float) (ticks-oldTicks)/1000.0; // s
+            oldTicks = ticks;
+            SDL_RenderClear(ren);
+            show();
+            SDL_RenderPresent(ren);
+        }
+        int end = SDL_GetTicks();
+        cout << "FPS: " << (300.0*1000.0/float(end-start)) << endl;
+    }
+    
     void show()
     {
         background.show(ren, ticks);
@@ -353,24 +385,10 @@ int main(int argc, char **argv)
     HoppinGame g;
     s.init();
     s.run();
-    
-    SDL_Event event;
-    if (SDL_PollEvent(&event))
-    {
-        if (event.type == SDL_KEYDOWN)
-        {
-            if (event.key.keysym.sym == SDLK_SPACE)
-            {
-                s.done();
-                g.init();
-                g.run();
-            }
-        }
-    }
+    s.done();
+    g.init();
+    g.run();
     g.done();
-
-//    g.init();
-//    g.run();
-//    g.done();
+     
     return 0;
 }
