@@ -203,7 +203,7 @@ public:
             return;
         }
         
-        win = SDL_CreateWindow(gameName, startX, startY, maxW, maxH, SDL_WINDOW_SHOWN);
+        win = SDL_CreateWindow(gameName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, maxW, maxH, SDL_WINDOW_SHOWN);
         if (win == NULL)
         {
             std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
