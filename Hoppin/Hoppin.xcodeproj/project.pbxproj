@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BEA1683C1E6096D100EF577D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA1683B1E6096D100EF577D /* main.cpp */; };
+		BEA168451E60975300EF577D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA168441E60975300EF577D /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		BEA168381E6096D100EF577D /* Hoppin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hoppin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA1683B1E6096D100EF577D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		BEA168421E60973900EF577D /* Img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Img; sourceTree = "<group>"; };
+		BEA168441E60975300EF577D /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEA168451E60975300EF577D /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +47,7 @@
 			children = (
 				BEA1683A1E6096D100EF577D /* Hoppin */,
 				BEA168391E6096D100EF577D /* Products */,
+				BEA168431E60975300EF577D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +63,17 @@
 			isa = PBXGroup;
 			children = (
 				BEA1683B1E6096D100EF577D /* main.cpp */,
+				BEA168421E60973900EF577D /* Img */,
 			);
 			path = Hoppin;
+			sourceTree = "<group>";
+		};
+		BEA168431E60975300EF577D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BEA168441E60975300EF577D /* SDL2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,6 +230,10 @@
 		BEA168401E6096D100EF577D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -223,6 +241,10 @@
 		BEA168411E6096D100EF577D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
