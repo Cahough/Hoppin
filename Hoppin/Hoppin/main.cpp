@@ -267,38 +267,64 @@ public:
 class HoppinGame:public Game
 {
     Animation background;
+    vector<Sprite> birds;
+    Sprite cloud;
+    Sprite happyCloud;
     Sprite us;
-    vector<BounceSprite> npcs;
+    //vector<BounceSprite> npcs;
     int x, y;
     int dx, dy;
 public:
     void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
     {
         Game::init(gameName);
-        background.addFrame(new AnimationFrame(ren, "Img/hello.bmp"));
-        background.addFrame(new AnimationFrame(ren, "Img/hello1.bmp", 500));
-        us.addFrames(ren, "Img/Big Planets/planet", 8);
-        us.set(0.0, 0.0);
-        for (int i = 0; i < 100; i++)
+        background.addFrame(new AnimationFrame(ren, "Img/hillbg.bmp"));
+        cloud.addFrames(ren, "Img/cloud", 1);
+        cloud.set(5.0, 5.0);
+        happyCloud.addFrames(ren, "Img/happycloud", 1);
+        happyCloud.set(350.0, 20.0);
+        
+//        birds.addFrames(ren, "Img/bird", 4);
+//        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
+        
+        for (int i = 0; i < 10; i++)
         {
-            BounceSprite s;
-            s.addFrames(ren, "Img/planet", 8);
-            s.set(rand()%maxW, rand()%maxH, rand()%20-10, rand()%20-10, 0.0, 10.0);
-            npcs.push_back(s);
+            Sprite b;
+            b.addFrames(ren, "Img/bird", 4);
+            b.set(rand()%maxW, rand()%20, -20.0, 0.0, 0.0, 0.0);
+            birds.push_back(b);
         }
+
+        
+        
+        
+//        for (int i = 0; i < 100; i++)
+//        {
+//            BounceSprite s;
+//            s.addFrames(ren, "Img/planet", 8);
+//            s.set(rand()%maxW, rand()%maxH, rand()%20-10, rand()%20-10, 0.0, 10.0);
+//            npcs.push_back(s);
+//        }
 
     }
     
     void show()
     {
         background.show(ren, ticks);
-        for (unsigned int i = 0; i < npcs.size(); i++)
+        cloud.show(ren, ticks);
+        happyCloud.show(ren, ticks);
+//        birds.show(ren, ticks);
+//        birds.update(dt);
+//        for (unsigned int i = 0; i < npcs.size(); i++)
+//        {
+//            npcs[i].show(ren, ticks);
+//            npcs[i].update(dt);
+//        }
+        for (unsigned int i = 0; i < birds.size(); i++)
         {
-            npcs[i].show(ren, ticks);
-            npcs[i].update(dt);
+            birds[i].show(ren, ticks);
+            birds[i].update(dt);
         }
-        us.show(ren, ticks);
-        us.update(dt);
     }
     
     void handleEvent(SDL_Event &event)
