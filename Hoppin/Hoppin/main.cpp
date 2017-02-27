@@ -318,14 +318,14 @@ public:
             birds[i].update(dt);
         }
         
-        rabbit.show(ren, ticks);
-        rabbit.update(dt);
-        
         for (unsigned int i = 0; i < spikes.size(); i++)
         {
             spikes[i].show(ren, ticks);
             spikes[i].update(dt);
         }
+        
+        rabbit.show(ren, ticks);
+        rabbit.update(dt);
     }
     
     void handleEvent(SDL_Event &event)
