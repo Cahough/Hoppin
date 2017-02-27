@@ -271,7 +271,6 @@ class HoppinGame:public Game
     Sprite cloud;
     Sprite happyCloud;
     Sprite us;
-    //vector<BounceSprite> npcs;
     int x, y;
     int dx, dy;
 public:
@@ -295,17 +294,6 @@ public:
             birds.push_back(b);
         }
 
-        
-        
-        
-//        for (int i = 0; i < 100; i++)
-//        {
-//            BounceSprite s;
-//            s.addFrames(ren, "Img/planet", 8);
-//            s.set(rand()%maxW, rand()%maxH, rand()%20-10, rand()%20-10, 0.0, 10.0);
-//            npcs.push_back(s);
-//        }
-
     }
     
     void show()
@@ -315,11 +303,6 @@ public:
         happyCloud.show(ren, ticks);
 //        birds.show(ren, ticks);
 //        birds.update(dt);
-//        for (unsigned int i = 0; i < npcs.size(); i++)
-//        {
-//            npcs[i].show(ren, ticks);
-//            npcs[i].update(dt);
-//        }
         for (unsigned int i = 0; i < birds.size(); i++)
         {
             birds[i].show(ren, ticks);
