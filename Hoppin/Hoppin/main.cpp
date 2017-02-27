@@ -138,12 +138,6 @@ public:
         ax = newAx, ay = newAy;
     }
     
-    void setVelocity(float newDx=0.0, float newDy=0.0)
-    {
-        dx = newDx;
-        dy = newDy;
-    }
-    
     Sprite(float newX=0.0, float newY=0.0, float newDx=0.0, float newDy=0.0, float newAx=0.0, float newAy=0.0) : Animation()
     {
         set(newX, newY, newDx, newDy, newAx, newAy);
@@ -179,8 +173,8 @@ public:
     virtual void update(const float &dt)
     {
         Sprite::update(dt);
-        if (x < 0 || x > MAXWIDTH-getW()) dx = -dx;
-        if (y < 0 || y > MAXHEIGHT-getH()) dy = -dy;
+        //if (y < 315) dy = -dy;
+        if (y > 350) dy = 0; // Virtual "floor"
     }
 };
 
@@ -268,9 +262,11 @@ class HoppinGame:public Game
 {
     Animation background;
     vector<Sprite> birds;
+    vector<Sprite> spikes; //Temp: obstacles
     Sprite cloud;
     Sprite happyCloud;
     Sprite us;
+    BounceSprite rabbit;
     int x, y;
     int dx, dy;
 public:
@@ -293,6 +289,19 @@ public:
             b.set(rand()%maxW, rand()%20, -20.0, 0.0, 0.0, 0.0);
             birds.push_back(b);
         }
+        
+        rabbit.addFrames(ren, "Img/rabbit", 4);
+        rabbit.set(10.0, 350.0, 0.0, 0.0, 0.0, 9.80*10);
+        
+        
+        // Temp: Obstacles
+        for (int i = 0; i < 10; i++)
+        {
+            Sprite s;
+            s.addFrames(ren, "Img/spikes", 1);
+            s.set(rand()%(1000-500) + 500, 420.0, -50.0, 0.0, 0.0, 0.0);
+            spikes.push_back(s);
+        }
 
     }
     
@@ -308,6 +317,15 @@ public:
             birds[i].show(ren, ticks);
             birds[i].update(dt);
         }
+        
+        rabbit.show(ren, ticks);
+        rabbit.update(dt);
+        
+        for (unsigned int i = 0; i < spikes.size(); i++)
+        {
+            spikes[i].show(ren, ticks);
+            spikes[i].update(dt);
+        }
     }
     
     void handleEvent(SDL_Event &event)
@@ -315,7 +333,10 @@ public:
         if (event.type == SDL_KEYDOWN)
         {
             if (event.key.keysym.sym == SDLK_SPACE)
-                us.setVelocity(10.0, -10.0);
+            {
+                if (rabbit.y > 349.9) // Make sure rabbit can't double bounce
+                    rabbit.dy = -100.0;
+            }
         }
     }
     
