@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <sstream>
+#include <math.h>
 
 using namespace std;
 const int MAXWIDTH = 640;
@@ -291,7 +292,7 @@ public:
         }
         
         rabbit.addFrames(ren, "Img/rabbit", 4);
-        rabbit.set(10.0, 350.0, 0.0, 0.0, 0.0, 9.80*10);
+        rabbit.set(10.0, 350.0, 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
         
         
         // Temp: Obstacles
@@ -299,7 +300,7 @@ public:
         {
             Sprite s;
             s.addFrames(ren, "Img/spikes", 1);
-            s.set(rand()%(1000-500) + 500, 420.0, -50.0, 0.0, 0.0, 0.0);
+            s.set(rand()%(1000*i-500) + 500, 420.0, -150.0, 0.0, 0.0, 0.0);
             spikes.push_back(s);
         }
 
@@ -335,7 +336,7 @@ public:
             if (event.key.keysym.sym == SDLK_SPACE)
             {
                 if (rabbit.y > 349.9) // Make sure rabbit can't double bounce
-                    rabbit.dy = -100.0;
+                    rabbit.dy = -300.0;
             }
         }
     }
