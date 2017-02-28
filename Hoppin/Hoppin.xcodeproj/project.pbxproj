@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B508F9B11E66432D0054730C /* Img in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEA168421E60973900EF577D /* Img */; };
 		BEA1683C1E6096D100EF577D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA1683B1E6096D100EF577D /* main.cpp */; };
 		BEA168451E60975300EF577D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA168441E60975300EF577D /* SDL2.framework */; };
 /* End PBXBuildFile section */
@@ -14,12 +15,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		BEA168361E6096D100EF577D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				B508F9B11E66432D0054730C /* Img in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -268,6 +270,7 @@
 				BEA168411E6096D100EF577D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
