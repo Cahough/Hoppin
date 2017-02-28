@@ -175,7 +175,7 @@ public:
     {
         Sprite::update(dt);
         //if (y < 315) dy = -dy;
-        if (y > 350) dy = 0; // Virtual "floor"
+        if (y > 362) dy = 0; // Virtual "floor"
     }
 };
 
@@ -264,6 +264,7 @@ class HoppinGame:public Game
     Animation background;
     vector<Sprite> birds;
     vector<Sprite> spikes; //Temp: obstacles
+    vector<Sprite> bricks;
     Sprite cloud;
     Sprite happyCloud;
     Sprite us;
@@ -292,7 +293,7 @@ public:
         }
         
         rabbit.addFrames(ren, "Img/rabbit", 4);
-        rabbit.set(10.0, 350.0, 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
+        rabbit.set(10.0, 362.0, 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
         
         
         // Temp: Obstacles
@@ -302,6 +303,13 @@ public:
             s.addFrames(ren, "Img/spikes", 1);
             s.set(rand()%(1000*i-500) + 500, 420.0, -150.0, 0.0, 0.0, 0.0);
             spikes.push_back(s);
+        }
+        for (int i = 0; i < 1000; i++)
+        {
+            Sprite f;
+            f.addFrames(ren, "Img/brick",1);
+            f.set(i*50, 440.0, -150.0, 0.0, 0.0, 0.0);
+            bricks.push_back(f);
         }
 
     }
@@ -317,6 +325,11 @@ public:
         {
             birds[i].show(ren, ticks);
             birds[i].update(dt);
+        }
+        for (unsigned int i = 0; i < bricks.size(); i++)
+        {
+            bricks[i].show(ren, ticks);
+            bricks[i].update(dt);
         }
         
         for (unsigned int i = 0; i < spikes.size(); i++)
