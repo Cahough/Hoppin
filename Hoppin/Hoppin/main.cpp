@@ -377,7 +377,7 @@ public:
             if (event.key.keysym.sym == SDLK_SPACE)
             {
                 if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
-                    rabbit.dy = -300.0;
+                    rabbit.dy = -500.0;
             }
             if (event.key.keysym.sym == SDLK_q)
             {
