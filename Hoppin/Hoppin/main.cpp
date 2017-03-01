@@ -269,6 +269,9 @@ class HoppinGame:public Game
     Sprite happyCloud;
     Sprite us;
     BounceSprite rabbit;
+    SDL_Rect *rabRect = new SDL_Rect;
+    SDL_Rect *spikeRect = new SDL_Rect;
+    float FLOOR_HEIGHT = 440.0;
     int x, y;
     int dx, dy;
 public:
@@ -283,7 +286,14 @@ public:
         
 //        birds.addFrames(ren, "Img/bird", 4);
 //        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
-        
+        for (int i = 0; i < 1000; i++)
+        {
+            Sprite f;
+            f.addFrames(ren, "Img/brick",1);
+            f.set(i*50,    FLOOR_HEIGHT, -150.0, 0.0, 0.0, 0.0);
+            bricks.push_back(f);
+        }
+
         for (int i = 0; i < 10; i++)
         {
             Sprite b;
@@ -293,7 +303,8 @@ public:
         }
         
         rabbit.addFrames(ren, "Img/rabbit", 4);
-        rabbit.set(10.0, 362.0, 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
+        rabbit.set(10.0, FLOOR_HEIGHT - rabbit.getH(), 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
+
         
         
         // Temp: Obstacles
@@ -304,16 +315,10 @@ public:
             s.set(rand()%(1000*i-500) + 500, 420.0, -150.0, 0.0, 0.0, 0.0);
             spikes.push_back(s);
         }
-        for (int i = 0; i < 1000; i++)
-        {
-            Sprite f;
-            f.addFrames(ren, "Img/brick",1);
-            f.set(i*50, 440.0, -150.0, 0.0, 0.0, 0.0);
-            bricks.push_back(f);
-        }
 
     }
     
+
     void show()
     {
         background.show(ren, ticks);
@@ -332,27 +337,52 @@ public:
             bricks[i].update(dt);
         }
         
-        for (unsigned int i = 0; i < spikes.size(); i++)
-        {
-            spikes[i].show(ren, ticks);
-            spikes[i].update(dt);
-        }
-        
         rabbit.show(ren, ticks);
         rabbit.update(dt);
+        
+        //set rect properties for collision
+        rabRect->x = rabbit.x;
+        rabRect->y = rabbit.y;
+        rabRect->h = rabbit.getH();
+        rabRect->w = rabbit.getW();
+        
+        for (unsigned int i = 0; i < spikes.size(); i++)
+        {
+
+            spikes[i].show(ren, ticks);
+            spikes[i].update(dt);
+            
+
+            
+            //set rect properties for collision
+            spikeRect->x=spikes[i].x;
+            spikeRect->y=spikes[i].y;
+            spikeRect->h=spikes[i].getW();
+            spikeRect->w=spikes[i].getH();
+            if(SDL_HasIntersection(rabRect, spikeRect)){
+                death();
+            }
+
+        }
+
+
+        
     }
-    
+    void death(){
+        finished = true;
+    }
     void handleEvent(SDL_Event &event)
     {
         if (event.type == SDL_KEYDOWN)
         {
             if (event.key.keysym.sym == SDLK_SPACE)
             {
-                if (rabbit.y > 349.9) // Make sure rabbit can't double bounce
+                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
                     rabbit.dy = -300.0;
             }
         }
     }
+
     
     void done()
     {
