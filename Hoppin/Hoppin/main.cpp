@@ -187,7 +187,7 @@ protected:
     SDL_Renderer *ren;
     int ticks;
     float dt;
-    bool finished;
+    bool finished = false;
     
 public:
     virtual void init(const char *gameName, int maxW=640, int maxH=480, int startX=100, int startY=100)
@@ -261,6 +261,7 @@ public:
 
 class HoppinGame:public Game
 {
+    bool quitGame = false;
     Animation background;
     vector<Sprite> birds;
     vector<Sprite> spikes; //Temp: obstacles
@@ -352,8 +353,6 @@ public:
             spikes[i].show(ren, ticks);
             spikes[i].update(dt);
             
-
-            
             //set rect properties for collision
             spikeRect->x=spikes[i].x;
             spikeRect->y=spikes[i].y;
@@ -380,9 +379,14 @@ public:
                 if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
                     rabbit.dy = -300.0;
             }
+            if (event.key.keysym.sym == SDLK_q)
+            {
+                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
+                    rabbit.dy = -300.0;
+            }
         }
     }
-
+    virtual bool getExitStatus(){ return quitGame;}
     
     void done()
     {
@@ -457,12 +461,14 @@ int main(int argc, char **argv)
 {
     StartGame s;
     HoppinGame g;
+
     s.init();
     s.run();
     s.done();
     g.init();
     g.run();
     g.done();
-     
+
+    
     return 0;
 }
