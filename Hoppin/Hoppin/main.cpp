@@ -259,6 +259,65 @@ public:
     virtual void handleEvent(SDL_Event &event) = 0;
 };
 
+class StartGame:public Game
+{
+    Animation background;
+public:
+    void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
+    {
+        Game::init(gameName);
+        background.addFrame(new AnimationFrame(ren, "Img/startscreen1.bmp", 500));
+        background.addFrame(new AnimationFrame(ren, "Img/startscreen2.bmp", 1000));
+    }
+    
+    void run()
+    {
+        int start = SDL_GetTicks();
+        int oldTicks = start;
+        finished = false;
+        while (!finished)
+        {
+            SDL_Event event;
+            if (SDL_PollEvent(&event))
+            {
+                if (event.type == SDL_WINDOWEVENT)
+                {
+                    if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                        finished = true;
+                }
+                if (event.type == SDL_KEYDOWN)
+                {
+                    finished = true;
+                }
+                if (!finished) handleEvent(event);
+            }
+            ticks = SDL_GetTicks();
+            dt = (float) (ticks-oldTicks)/1000.0; // s
+            oldTicks = ticks;
+            SDL_RenderClear(ren);
+            show();
+            SDL_RenderPresent(ren);
+        }
+        int end = SDL_GetTicks();
+        cout << "FPS: " << (300.0*1000.0/float(end-start)) << endl;
+    }
+    
+    void show()
+    {
+        background.show(ren, ticks);
+    }
+    
+    void handleEvent(SDL_Event &event)
+    {
+    }
+    
+    void done()
+    {
+        background.destroy();
+        Game::done();
+    }
+};
+
 class HoppinGame:public Game
 {
     bool quitGame = false;
@@ -369,6 +428,9 @@ public:
     }
     void death(){
         finished = true;
+        StartGame s;
+        s.init();
+        s.run();
     }
     void handleEvent(SDL_Event &event)
     {
@@ -387,67 +449,6 @@ public:
         }
     }
     virtual bool getExitStatus(){ return quitGame;}
-    
-    void done()
-    {
-        background.destroy();
-        Game::done();
-    }
-};
-
-
-
-class StartGame:public Game
-{
-    Animation background;
-public:
-    void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
-    {
-        Game::init(gameName);
-        background.addFrame(new AnimationFrame(ren, "Img/startscreen1.bmp", 500));
-        background.addFrame(new AnimationFrame(ren, "Img/startscreen2.bmp", 1000));
-    }
-    
-    void run()
-    {
-        int start = SDL_GetTicks();
-        int oldTicks = start;
-        finished = false;
-        while (!finished)
-        {
-            SDL_Event event;
-            if (SDL_PollEvent(&event))
-            {
-                if (event.type == SDL_WINDOWEVENT)
-                {
-                    if (event.window.event == SDL_WINDOWEVENT_CLOSE)
-                        finished = true;
-                }
-                if (event.type == SDL_KEYDOWN)
-                {
-                    finished = true;
-                }
-                if (!finished) handleEvent(event);
-            }
-            ticks = SDL_GetTicks();
-            dt = (float) (ticks-oldTicks)/1000.0; // s
-            oldTicks = ticks;
-            SDL_RenderClear(ren);
-            show();
-            SDL_RenderPresent(ren);
-        }
-        int end = SDL_GetTicks();
-        cout << "FPS: " << (300.0*1000.0/float(end-start)) << endl;
-    }
-    
-    void show()
-    {
-        background.show(ren, ticks);
-    }
-    
-    void handleEvent(SDL_Event &event)
-    {
-    }
     
     void done()
     {
