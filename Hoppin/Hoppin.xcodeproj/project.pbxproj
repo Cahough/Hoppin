@@ -30,6 +30,7 @@
 		BEA1683B1E6096D100EF577D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BEA168421E60973900EF577D /* Img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Img; sourceTree = "<group>"; };
 		BEA168441E60975300EF577D /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		BEA6CCA11E7C360700D35349 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = audio; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				BEA1683B1E6096D100EF577D /* main.cpp */,
+				BEA6CCA11E7C360700D35349 /* audio */,
 				BEA168421E60973900EF577D /* Img */,
 			);
 			path = Hoppin;
