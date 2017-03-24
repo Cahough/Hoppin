@@ -9,6 +9,7 @@
 using namespace std;
 const int MAXWIDTH = 640;
 const int MAXHEIGHT = 480;
+bool endGame = false;
 
 // Implement Multi-Threading (Carter)
 // Implement Media-Manager (Carter)
@@ -241,12 +242,18 @@ public:
                 if (event.type == SDL_WINDOWEVENT)
                 {
                     if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                    {
                         finished = true;
+                        endGame = true;
+                    }
                 }
                 if (event.type == SDL_KEYDOWN)
                 {
                     if (event.key.keysym.sym == SDLK_ESCAPE)
+                    {
                         finished = true;
+                        endGame = true;
+                    }
                 }
                 if (!finished) handleEvent(event);
             }
@@ -288,7 +295,10 @@ public:
                 if (event.type == SDL_WINDOWEVENT)
                 {
                     if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                    {
                         finished = true;
+                        endGame = true;
+                    }
                 }
                 if (event.type == SDL_KEYDOWN)
                 {
@@ -433,9 +443,6 @@ public:
     }
     void death(){
         finished = true;
-        StartGame s;
-        s.init();
-        s.run();
     }
     void handleEvent(SDL_Event &event)
     {
@@ -465,15 +472,18 @@ public:
 
 int main(int argc, char **argv)
 {
-    StartGame s;
-    HoppinGame g;
+    while (endGame == false)
+    {
+        StartGame s;
+        HoppinGame g;
 
-    s.init();
-    s.run();
-    s.done();
-    g.init();
-    g.run();
-    g.done();
+        s.init();
+        s.run();
+        s.done();
+        g.init();
+        g.run();
+        g.done();
+    }
 
     
     return 0;
