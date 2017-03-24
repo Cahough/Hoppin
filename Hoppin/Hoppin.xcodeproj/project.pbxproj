@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B508F9B11E66432D0054730C /* Img in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEA168421E60973900EF577D /* Img */; };
+		BE0F3CDB1E84C0FC001BDF40 /* multi-threading (broken).cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE0F3CDA1E84C0FC001BDF40 /* multi-threading (broken).cpp */; };
 		BEA1683C1E6096D100EF577D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA1683B1E6096D100EF577D /* main.cpp */; };
 		BEA168451E60975300EF577D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA168441E60975300EF577D /* SDL2.framework */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BE0F3CDA1E84C0FC001BDF40 /* multi-threading (broken).cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "multi-threading (broken).cpp"; sourceTree = "<group>"; };
 		BEA168381E6096D100EF577D /* Hoppin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hoppin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA1683B1E6096D100EF577D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BEA168421E60973900EF577D /* Img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Img; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 		BEA1683A1E6096D100EF577D /* Hoppin */ = {
 			isa = PBXGroup;
 			children = (
+				BE0F3CDA1E84C0FC001BDF40 /* multi-threading (broken).cpp */,
 				BEA1683B1E6096D100EF577D /* main.cpp */,
 				BEA6CCA11E7C360700D35349 /* audio */,
 				BEA168421E60973900EF577D /* Img */,
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEA1683C1E6096D100EF577D /* main.cpp in Sources */,
+				BE0F3CDB1E84C0FC001BDF40 /* multi-threading (broken).cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
