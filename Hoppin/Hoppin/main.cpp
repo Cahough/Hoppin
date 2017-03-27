@@ -432,8 +432,8 @@ public:
         
         //set rect properties for collision
         rabRect->x = rabbit.x;
-        rabRect->y = rabbit.y;
-        rabRect->h = rabbit.getH();
+        rabRect->y = rabbit.y + rabbit.getH() - 20;
+        rabRect->h = 5;
         rabRect->w = rabbit.getW();
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
         {
@@ -442,8 +442,8 @@ public:
             
             blockRect->x=jumpBlocks[i].x;
             blockRect->y=jumpBlocks[i].y;
-            blockRect->h=jumpBlocks[i].getW();
-            blockRect->w=jumpBlocks[i].getH();
+            blockRect->h=jumpBlocks[i].getH();
+            blockRect->w=jumpBlocks[i].getW();
             if(SDL_HasIntersection(rabRect, blockRect)){
                 rabbit.dy = 0;
                 rabbit.y = blockRect->y - rabbit.getH();
