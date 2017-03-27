@@ -340,15 +340,18 @@ class HoppinGame:public Game
     vector<Sprite> birds;
     vector<Sprite> spikes; //Temp: obstacles
     vector<Sprite> bricks;
+    vector<Sprite> jumpBlocks;
     Sprite cloud;
     Sprite happyCloud;
     Sprite us;
     BounceSprite rabbit;
     SDL_Rect *rabRect = new SDL_Rect;
     SDL_Rect *spikeRect = new SDL_Rect;
+    SDL_Rect *blockRect = new SDL_Rect;
     float FLOOR_HEIGHT = 440.0;
     int x, y;
     int dx, dy;
+    bool canJump = true;
 public:
     void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
     {
@@ -387,8 +390,15 @@ public:
         {
             Sprite s;
             s.addFrames(ren, "Img/spikes", 1);
-            s.set(rand()%(1000*i-500) + 500, 420.0, -150.0, 0.0, 0.0, 0.0);
+            s.set(rand()%(1000*i-500) + 500, 420.0, -15.0, 0.0, 0.0, 0.0);
             spikes.push_back(s);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            Sprite b;
+            b.addFrames(ren, "Img/jumpblock", 1);
+            b.set(rand()%(1000*i-500) + 500, rand()%200 + 200, -150.0, 0.0, 0.0, 0.0);
+            jumpBlocks.push_back(b);
         }
 
     }
@@ -420,6 +430,20 @@ public:
         rabRect->y = rabbit.y;
         rabRect->h = rabbit.getH();
         rabRect->w = rabbit.getW();
+        for (unsigned int i = 0; i < jumpBlocks.size(); i++)
+        {
+            jumpBlocks[i].show(ren, ticks);
+            jumpBlocks[i].update(dt);
+            
+            blockRect->x=jumpBlocks[i].x;
+            blockRect->y=jumpBlocks[i].y;
+            blockRect->h=jumpBlocks[i].getW();
+            blockRect->w=jumpBlocks[i].getH();
+            if(SDL_HasIntersection(rabRect, blockRect)){
+                rabbit.dy = 0;
+                rabbit.y = blockRect->y - rabbit.getH();
+                canJump = true;
+            }
         
         for (unsigned int i = 0; i < spikes.size(); i++)
         {
@@ -435,7 +459,7 @@ public:
             if(SDL_HasIntersection(rabRect, spikeRect)){
                 death();
             }
-
+        }
         }
 
 
@@ -450,13 +474,17 @@ public:
         {
             if (event.key.keysym.sym == SDLK_SPACE)
             {
-                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
+                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){ // Make sure rabbit can't double bounce
                     rabbit.dy = -500.0;
+                    canJump = false;
+                }
             }
             if (event.key.keysym.sym == SDLK_q)
             {
-                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01) // Make sure rabbit can't double bounce
+                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){ // Make sure rabbit can't double bounce
                     rabbit.dy = -300.0;
+                    canJump = false;
+                }
             }
         }
     }

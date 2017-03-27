@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B508F9B11E66432D0054730C /* Img in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEA168421E60973900EF577D /* Img */; };
+		B52AD9881E88970A009C507B /* audio in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEA6CCA11E7C360700D35349 /* audio */; };
 		BEA1683C1E6096D100EF577D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA1683B1E6096D100EF577D /* main.cpp */; };
 		BEA168451E60975300EF577D /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA168441E60975300EF577D /* SDL2.framework */; };
 /* End PBXBuildFile section */
@@ -19,6 +20,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				B52AD9881E88970A009C507B /* audio in CopyFiles */,
 				B508F9B11E66432D0054730C /* Img in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
