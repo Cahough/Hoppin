@@ -5,6 +5,7 @@
 #include <map>
 #include <sstream>
 #include <math.h>
+#include <SDL2_mixer/SDL_mixer.h>
 
 using namespace std;
 const int MAXWIDTH = 640;
@@ -335,6 +336,7 @@ public:
 
 class HoppinGame:public Game
 {
+    Mix_Chunk *jumpSound;
     bool quitGame = false;
     Animation background;
     vector<Sprite> birds;
@@ -361,6 +363,9 @@ public:
         cloud.set(5.0, 5.0);
         happyCloud.addFrames(ren, "Img/happycloud", 1);
         happyCloud.set(350.0, 20.0);
+        Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ); //probably needs to be moved to media manager
+        
+        jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );
         
 //        birds.addFrames(ren, "Img/bird", 4);
 //        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
@@ -477,6 +482,7 @@ public:
                 if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){ // Make sure rabbit can't double bounce
                     rabbit.dy = -500.0;
                     canJump = false;
+                    Mix_PlayChannel( -1, jumpSound, 0 );
                 }
             }
             if (event.key.keysym.sym == SDLK_q)
