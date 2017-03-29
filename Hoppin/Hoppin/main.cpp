@@ -400,8 +400,8 @@ public:
             Sprite f;
             f.addFrames(ren, "Img/brick",1);
             int skip = rand()%10;
-            if (skip != 5)f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
-            bricks.push_back(f);
+            if (skip != 5){f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
+                bricks.push_back(f);}
         }
 
         for (int i = 0; i < 10; i++)
@@ -541,7 +541,7 @@ public:
             }
             if (event.key.keysym.sym == SDLK_q)
             {
-                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){ // Make sure rabbit can't double bounce
+                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){
                     rabbit.dy = -300.0;
                     canJump = false;
                 }
