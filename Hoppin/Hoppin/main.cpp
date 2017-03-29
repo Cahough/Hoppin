@@ -11,23 +11,30 @@ using namespace std;
 const int MAXWIDTH = 640;
 const int MAXHEIGHT = 480;
 bool endGame = false;
-class TextureInfo{
+
+class TextureInfo
+{
 public:
     SDL_Texture *texture;
     int w,h;
 };
 
-class MediaManager {
+class MediaManager
+{
     map<string,TextureInfo *> images;
 public:
-    TextureInfo *load(SDL_Renderer *ren,string imagePath) {
-        if (images.count(imagePath)==0) {
+    TextureInfo *load(SDL_Renderer *ren,string imagePath)
+    {
+        if (images.count(imagePath)==0)
+        {
             SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
             if (bmp == NULL){
-                std::cout << "SDL_LoadBMP Error: " << SDL_GetError()  << std::endl;
+                cout << "SDL_LoadBMP Error: " << SDL_GetError()  << endl;
                 SDL_Quit();
-            } else {
-                std::cout << "Success reading " << imagePath  << std::endl;
+            }
+            else
+            {
+                cout << "Success reading " << imagePath  << endl;
             }
             SDL_SetColorKey(bmp,SDL_TRUE,SDL_MapRGB(bmp->format,0,255,0));
             TextureInfo *t=new TextureInfo();
@@ -35,18 +42,22 @@ public:
             t->h=bmp->h;
             t->texture = SDL_CreateTextureFromSurface(ren, bmp);
             SDL_FreeSurface(bmp);
-            if (t->texture == NULL){
-                std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+            if (t->texture == NULL)
+            {
+                cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl;
                 SDL_Quit();
             }
             images[imagePath]=t;
         }
         return images[imagePath];
     }
-    void destroy(TextureInfo *t) {
+    void destroy(TextureInfo *t)
+    {
         map<string,TextureInfo *>::iterator it;
-        for (it=images.begin();it!=images.end();it++) {
-            if (it->second==t) {
+        for (it=images.begin();it!=images.end();it++)
+        {
+            if (it->second==t)
+            {
                 images.erase(it->first);
             }
         }
@@ -55,14 +66,14 @@ public:
 
 class AnimationFrame
 {
-    SDL_Texture *frame;
-    int time, w, h; // time is in ms
-    
+    MediaManager media;
+    TextureInfo *frame;
+    int time; // ms
 public:
-    int getW() {return w;}
-    int getH() {return h;}
+    int getW() { return frame->w; }
+    int getH() { return frame->h; }
     
-    AnimationFrame(SDL_Texture *newFrame, int newTime=100)
+    AnimationFrame(TextureInfo *newFrame, int newTime=100)
     {
         frame = newFrame;
         time = newTime;
@@ -70,39 +81,16 @@ public:
     
     AnimationFrame(SDL_Renderer *ren, const char *imagePath, int newTime=100)
     {
-        SDL_Surface *bmp = SDL_LoadBMP(imagePath);
-        if (bmp == NULL)
-        {
-            cout << "SDL_LoadBMP Error: " << SDL_GetError() << endl;
-            SDL_Quit();
-        }
-        
-        SDL_SetColorKey(bmp, SDL_TRUE, SDL_MapRGB(bmp->format,0,255,0));
-        w = bmp->w;
-        h = bmp->h;
-        
-        frame = SDL_CreateTextureFromSurface(ren, bmp);
-        SDL_FreeSurface(bmp);
-        if (frame == NULL)
-        {
-            std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
-            SDL_Quit();
-        }
+        frame = media.load(ren, imagePath);
         time = newTime;
     }
     
     void show(SDL_Renderer *ren, int x=0, int y=0)
     {
-        SDL_Rect src, dest;
-        dest.x = x;
-        dest.y = y;
-        dest.w = w;
-        dest.h = h;
-        src.x = 0;
-        src.y = 0;
-        src.w = w;
-        src.h = h;
-        SDL_RenderCopy(ren, frame, &src, &dest);
+        SDL_Rect src,dest;
+        dest.x=x;  dest.y=y; dest.w=frame->w; dest.h=frame->h;
+        src.x=0;  src.y=0; src.w=frame->w; src.h=frame->h;
+        SDL_RenderCopy(ren, frame->texture, &src, &dest);
     }
     
     int getTime()
@@ -112,7 +100,7 @@ public:
     
     void destroy()
     {
-        SDL_DestroyTexture(frame);
+        //media.destroy(frame);
     }
 };
 
