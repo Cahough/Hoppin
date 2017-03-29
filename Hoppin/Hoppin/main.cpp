@@ -11,7 +11,11 @@ using namespace std;
 const int MAXWIDTH = 640;
 const int MAXHEIGHT = 480;
 bool endGame = false;
-
+class TextureInfo{
+public:
+    SDL_Texture *texture;
+    int w,h;
+};
 
 class MediaManager {
     map<string,TextureInfo *> images;
