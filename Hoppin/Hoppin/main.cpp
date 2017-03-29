@@ -12,11 +12,6 @@ const int MAXWIDTH = 640;
 const int MAXHEIGHT = 480;
 bool endGame = false;
 
-// Implement Multi-Threading (Carter)
-// Implement Media-Manager (Carter)
-// Add jump sound (Ben)
-// Work on jump blocks (Ben)
-
 class AnimationFrame
 {
     SDL_Texture *frame;
