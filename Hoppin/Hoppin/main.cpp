@@ -550,7 +550,7 @@ int main(int argc, char **argv)
     {
         StartGame s;
         HoppinGame g;
-
+        
         s.init();
         s.run();
         s.done();
