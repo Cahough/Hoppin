@@ -16,7 +16,7 @@ class TextureInfo
 {
 public:
     SDL_Texture *texture;
-    int w,h;
+    int w, h;
 };
 
 class MediaManager
@@ -25,7 +25,7 @@ class MediaManager
 public:
     TextureInfo *load(SDL_Renderer *ren,string imagePath)
     {
-        if (images.count(imagePath)==0)
+        if (images.count(imagePath) == 0)
         {
             SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
             if (bmp == NULL){
@@ -37,9 +37,9 @@ public:
                 cout << "Success reading " << imagePath  << endl;
             }
             SDL_SetColorKey(bmp,SDL_TRUE,SDL_MapRGB(bmp->format,0,255,0));
-            TextureInfo *t=new TextureInfo();
-            t->w=bmp->w;
-            t->h=bmp->h;
+            TextureInfo *t = new TextureInfo();
+            t->w = bmp->w;
+            t->h = bmp->h;
             t->texture = SDL_CreateTextureFromSurface(ren, bmp);
             SDL_FreeSurface(bmp);
             if (t->texture == NULL)
@@ -47,16 +47,17 @@ public:
                 cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl;
                 SDL_Quit();
             }
-            images[imagePath]=t;
+            images[imagePath] = t;
         }
         return images[imagePath];
     }
+    
     void destroy(TextureInfo *t)
     {
         map<string,TextureInfo *>::iterator it;
-        for (it=images.begin();it!=images.end();it++)
+        for (it=images.begin(); it!=images.end(); it++)
         {
-            if (it->second==t)
+            if (it->second == t)
             {
                 images.erase(it->first);
             }
