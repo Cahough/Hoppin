@@ -375,6 +375,7 @@ class HoppinGame:public Game
     SDL_Rect *rabRect = new SDL_Rect;
     SDL_Rect *spikeRect = new SDL_Rect;
     SDL_Rect *blockRect = new SDL_Rect;
+    SDL_Rect *floorRect = new SDL_Rect;
     float FLOOR_HEIGHT = 440.0;
     int x, y;
     int dx, dy;
@@ -398,7 +399,8 @@ public:
         {
             Sprite f;
             f.addFrames(ren, "Img/brick",1);
-            f.set(i*50,    FLOOR_HEIGHT, -150.0, 0.0, 0.0, 0.0);
+            int skip = rand()%10;
+            if (skip != 5)f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
             bricks.push_back(f);
         }
 
@@ -461,11 +463,7 @@ public:
             birds[i].show(ren, ticks);
             birds[i].update(dt);
         }
-        for (unsigned int i = 0; i < bricks.size(); i++)
-        {
-            bricks[i].show(ren, ticks);
-            bricks[i].update(dt);
-        }
+
         
         rabbit.show(ren, ticks);
         rabbit.update(dt);
@@ -488,6 +486,22 @@ public:
                 rabbit.dy = 0;
                 rabbit.y = blockRect->y - rabbit.getH();
                 canJump = true;
+            }
+        for (unsigned int i = 0; i < bricks.size(); i++)
+            {
+                bricks[i].show(ren, ticks);
+                bricks[i].update(dt);
+                
+                floorRect->x = bricks[i].x;
+                floorRect->y = bricks[i].y + bricks[i].getH();
+                floorRect->h = bricks[i].getH();
+                floorRect->w = bricks[i].getW();
+                
+                if(SDL_HasIntersection(rabRect, floorRect)){
+                    rabbit.dy = 0;
+                    rabbit.y = floorRect->y - rabbit.getH();
+                    canJump = true;
+                }
             }
         
         for (unsigned int i = 0; i < spikes.size(); i++)
