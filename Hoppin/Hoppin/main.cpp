@@ -5,6 +5,8 @@
 #include <map>
 #include <sstream>
 #include <math.h>
+#include <thread>
+#include <chrono>
 #include <SDL2_mixer/SDL_mixer.h>
 
 using namespace std;
@@ -23,7 +25,7 @@ class MediaManager
 {
     map<string,TextureInfo *> images;
 public:
-    TextureInfo *load(SDL_Renderer *ren,string imagePath)
+    TextureInfo *load(SDL_Renderer *ren, string imagePath)
     {
         if (images.count(imagePath) == 0)
         {
@@ -101,7 +103,6 @@ public:
     
     void destroy()
     {
-        //media.destroy(frame);
     }
 };
 
@@ -210,7 +211,6 @@ public:
         if (y > 362) dy = 0; // Virtual "floor"
     }
 };
-
 
 class Game
 {
@@ -414,6 +414,21 @@ public:
         rabbit.set(10.0, FLOOR_HEIGHT - rabbit.getH(), 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
 
         
+        
+        // Temp: Working on a "setInterval" equiv. to run a loop or function every x amount of time.
+//        chrono::seconds interval( 10 ) ; // 10 seconds
+//        for( int i = 0 ; i < 10 ; ++i )
+//        {
+//            cout << "tick!\n" << std::flush ;
+//            for (int i = 0; i < 10; i++)
+//            {
+//                Sprite s;
+//                s.addFrames(ren, "Img/spikes", 1);
+//                s.set(rand()%(1000*i-500) + 500, 420.0, -15.0, 0.0, 0.0, 0.0);
+//                spikes.push_back(s);
+//            }
+//            this_thread::sleep_for( interval ) ;
+//        }
         
         // Temp: Obstacles
         for (int i = 0; i < 10; i++)
