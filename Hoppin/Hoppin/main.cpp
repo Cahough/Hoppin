@@ -470,7 +470,7 @@ public:
         
         //set rect properties for collision
         rabRect->x = rabbit.x;
-        rabRect->y = rabbit.y + rabbit.getH() - 20;
+        rabRect->y = rabbit.y + rabbit.getH() -5;
         rabRect->h = 5;
         rabRect->w = rabbit.getW();
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
@@ -499,7 +499,7 @@ public:
                 
                 if(SDL_HasIntersection(rabRect, floorRect)){
                     rabbit.dy = 0;
-                    rabbit.y = floorRect->y - rabbit.getH();
+                    rabbit.y = floorRect->y + rabbit.getH();
                     canJump = true;
                 }
             }
@@ -533,7 +533,7 @@ public:
         {
             if (event.key.keysym.sym == SDLK_SPACE)
             {
-                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){ // Make sure rabbit can't double bounce
+                if (rabbit.dy==0 || canJump){ // Make sure rabbit can't double bounce
                     rabbit.dy = -500.0;
                     canJump = false;
                     Mix_PlayChannel( -1, jumpSound, 0 );
@@ -541,7 +541,7 @@ public:
             }
             if (event.key.keysym.sym == SDLK_q)
             {
-                if (rabbit.y > FLOOR_HEIGHT-rabbit.getH()-.01 || canJump){
+                if ( canJump){
                     rabbit.dy = -300.0;
                     canJump = false;
                 }
