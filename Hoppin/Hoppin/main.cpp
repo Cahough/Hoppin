@@ -493,13 +493,13 @@ public:
                 bricks[i].update(dt);
                 
                 floorRect->x = bricks[i].x;
-                floorRect->y = bricks[i].y + bricks[i].getH();
+                floorRect->y = bricks[i].y;
                 floorRect->h = bricks[i].getH();
                 floorRect->w = bricks[i].getW();
                 
                 if(SDL_HasIntersection(rabRect, floorRect)){
                     rabbit.dy = 0;
-                    rabbit.y = floorRect->y + rabbit.getH();
+                    rabbit.y = floorRect->y - rabbit.getH();
                     canJump = true;
                 }
             }
