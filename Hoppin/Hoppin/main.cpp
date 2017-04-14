@@ -499,7 +499,7 @@ public:
                 
                 if(SDL_HasIntersection(rabRect, floorRect)){
                     rabbit.dy = 0;
-                    rabbit.y = floorRect->y + rabbit.getH();
+                    rabbit.y = floorRect->y + rabbit.getH(); //pls stop sinking
                     canJump = true;
                 }
             }
