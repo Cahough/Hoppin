@@ -400,7 +400,11 @@ public:
             Sprite f;
             f.addFrames(ren, "Img/brick",1);
             int skip = rand()%10;
-            if (skip != 5){f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
+            if (skip != 5){
+                f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
+                bricks.push_back(f);}
+            else {
+                f.set(i*50, 1000, -15.0, 0.0, 0.0, 0.0);
                 bricks.push_back(f);}
         }
 
@@ -453,7 +457,8 @@ public:
 
     void show()
     {
-        background.show(ren, ticks);
+        backgroundParralax();
+        
         cloud.show(ren, ticks);
         happyCloud.show(ren, ticks);
 //        birds.show(ren, ticks);
@@ -516,13 +521,18 @@ public:
             spikeRect->h=spikes[i].getW();
             spikeRect->w=spikes[i].getH();
             if(SDL_HasIntersection(rabRect, spikeRect)){
-                death();
-            }
+              death();
+          }
         }
         }
 
 
         
+    }
+    void backgroundParralax(){
+        int bgroundloc = -(ticks/20)%640; //rate of parralax effect
+        background.show(ren, ticks,bgroundloc,0);
+        background.show(ren,ticks,bgroundloc+background.getW(),0);
     }
     void death(){
         finished = true;
