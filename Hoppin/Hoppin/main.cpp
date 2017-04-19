@@ -386,9 +386,9 @@ public:
         Game::init(gameName);
         background.addFrame(new AnimationFrame(ren, "Img/hillbg.bmp"));
         cloud.addFrames(ren, "Img/cloud", 1);
-        cloud.set(5.0, 5.0);
+        cloud.set(rand()%5+5.0, 5.0);
         happyCloud.addFrames(ren, "Img/happycloud", 1);
-        happyCloud.set(350.0, 20.0);
+        happyCloud.set(rand()%50+350.0, rand()%20+20.0);
         Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ); //probably needs to be moved to media manager
         
         jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );
@@ -402,9 +402,6 @@ public:
             int skip = rand()%10;
             if (skip != 5){
                 f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
-                bricks.push_back(f);}
-            else {
-                f.set(i*50, 1000, -15.0, 0.0, 0.0, 0.0);
                 bricks.push_back(f);}
         }
 
@@ -457,10 +454,12 @@ public:
 
     void show()
     {
-        backgroundParralax();
+        backgroundParallax(20);
         
-        cloud.show(ren, ticks);
-        happyCloud.show(ren, ticks);
+        cloudParallax(40, cloud);
+        cloudParallax(30, happyCloud);
+       // cloud.show(ren, ticks);
+        //happyCloud.show(ren, ticks);
 //        birds.show(ren, ticks);
 //        birds.update(dt);
         for (unsigned int i = 0; i < birds.size(); i++)
@@ -474,19 +473,17 @@ public:
         rabbit.update(dt);
         
         //set rect properties for collision
-        rabRect->x = rabbit.x;
+        
+        setCollision(rabRect, rabbit);
         rabRect->y = rabbit.y + rabbit.getH() -5;
-        rabRect->h = 5;
-        rabRect->w = rabbit.getW();
+        rabRect->h = 5;                             //modified hitbox
+        
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
         {
             jumpBlocks[i].show(ren, ticks);
             jumpBlocks[i].update(dt);
             
-            blockRect->x=jumpBlocks[i].x;
-            blockRect->y=jumpBlocks[i].y;
-            blockRect->h=jumpBlocks[i].getH();
-            blockRect->w=jumpBlocks[i].getW();
+            setCollision(blockRect, jumpBlocks[i]);
             if(SDL_HasIntersection(rabRect, blockRect)){
                 rabbit.dy = 0;
                 rabbit.y = blockRect->y - rabbit.getH();
@@ -496,11 +493,7 @@ public:
             {
                 bricks[i].show(ren, ticks);
                 bricks[i].update(dt);
-                
-                floorRect->x = bricks[i].x;
-                floorRect->y = bricks[i].y;
-                floorRect->h = bricks[i].getH();
-                floorRect->w = bricks[i].getW();
+                setCollision(floorRect, bricks[i]);
                 
                 if(SDL_HasIntersection(rabRect, floorRect)){
                     rabbit.dy = 0;
@@ -514,12 +507,8 @@ public:
 
             spikes[i].show(ren, ticks);
             spikes[i].update(dt);
+            setCollision(spikeRect, spikes[i]);
             
-            //set rect properties for collision
-            spikeRect->x=spikes[i].x;
-            spikeRect->y=spikes[i].y;
-            spikeRect->h=spikes[i].getW();
-            spikeRect->w=spikes[i].getH();
             if(SDL_HasIntersection(rabRect, spikeRect)){
               death();
           }
@@ -529,11 +518,33 @@ public:
 
         
     }
-    void backgroundParralax(){
-        int bgroundloc = -(ticks/20)%640; //rate of parralax effect
+    void setCollision(SDL_Rect *rect, Sprite s){
+        rect->x=s.x;
+        rect->y=s.y;
+        rect->h = s.getH();
+        rect->w = s.getW();
+    }
+    void backgroundParallax(int rate){
+        int bgroundloc = -(ticks/rate)%background.getW();
         background.show(ren, ticks,bgroundloc,0);
         background.show(ren,ticks,bgroundloc+background.getW(),0);
     }
+    void cloudParallax(int rate, Sprite s){
+        int cloudloc=-(ticks/rate)%640;
+        int r = rand()%50;
+        //cloud.y += r;
+        
+        s.Animation::show(ren,ticks,cloudloc + s.x,s.y);
+        s.Animation::show(ren,ticks,cloudloc+640 + s.x,s.y);
+        
+//        if (r<10){
+//            happyCloud.Animation::show(ren,ticks,cloudloc,cloud.y + r);
+//            happyCloud.Animation::show(ren,ticks,cloudloc+640,cloud.y+r);
+//        }
+       // if(happyCloud.x < -happyCloud.getW()) happyCloud.x=640;
+       // happyCloud.Animation::show(ren,ticks,cloudloc+happyCloud.x,happyCloud.y);
+    }
+    
     void death(){
         finished = true;
     }
