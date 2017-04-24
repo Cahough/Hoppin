@@ -8,7 +8,7 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
-#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 
 using namespace std;
 const int MAXWIDTH = 640;
@@ -399,7 +399,8 @@ public:
         
 //        birds.addFrames(ren, "Img/bird", 4);
 //        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
-        for (int i=0; i<999;i+=2){
+        for (int i=0; i < 1000; i+=2)
+        {
             int ran = rand()%10;
             stage1[i]=ran;          //level "blueprint" to base obstacles/danger zones on
             stage1[i+1]=ran;        //floor blocks/ pits currently in 2 block segments
@@ -438,12 +439,26 @@ public:
 //        }
         
         // Temp: Obstacles
-        for (int i = 0; i < 10; i++)
+		int randnum1 = rand()%(640);
+        int randnum2 = randnum1;
+        Sprite s;
+        s.addFrames(ren, "Img/spikes", 1);
+		s.set(randnum1, 420.0, -15.0, 0.0, 0.0, 0.0);
+		spikes.push_back(s);
+        for (int i = 0; i < 1000; i++)
         {
             Sprite s;
-            s.addFrames(ren, "Img/spikes", 1);
-            s.set(rand()%(1000*i-500) + 500, 420.0, -15.0, 0.0, 0.0, 0.0);
-            spikes.push_back(s);
+            randnum1 = randnum2;
+            if(!spikes.empty())
+            {
+				randnum2 = rand()%(1000*i-500) + 500;
+				if(randnum2 > randnum1)
+				{
+					s.addFrames(ren, "Img/spikes", 1);
+					s.set(randnum2, 420.0, -15.0, 0.0, 0.0, 0.0);
+					spikes.push_back(s);
+				}
+			}
         }
         for (int i = 0; i < 10; i++)
         {
@@ -574,17 +589,20 @@ int main(int argc, char **argv)
 {
     while (endGame == false)
     {
-        StartGame s;
-        HoppinGame g;
-        s.init();
-        s.run();
-        s.done();
 		if (endGame == false)
 		{
+			StartGame s;
+			s.init();
+			s.run();
+			s.done();
+		}
+		if (endGame == false)
+		{
+			HoppinGame g;
 			g.init();
 			g.run();
 			g.done();
 		}
-    }
-    return 0;
+	}
+	return 0;
 }
