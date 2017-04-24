@@ -8,7 +8,7 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
-#include <SDL2/SDL_mixer.h>
+#include <SDL2_mixer/SDL_mixer.h>
 
 using namespace std;
 const int MAXWIDTH = 640;
@@ -383,6 +383,7 @@ class HoppinGame:public Game
     int x, y;
     int dx, dy;
     bool canJump = true;
+    int stage1[1000];
 public:
     void init(const char *gameName = "Hoppin", int maxW=MAXWIDTH, int maxH=MAXHEIGHT, int startX=100, int startY=100)
     {
@@ -398,14 +399,19 @@ public:
         
 //        birds.addFrames(ren, "Img/bird", 4);
 //        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
+        for (int i=0; i<999;i+=2){
+            int ran = rand()%10;
+            stage1[i]=ran;          //level "blueprint" to base obstacles/danger zones on
+            stage1[i+1]=ran;        //floor blocks/ pits currently in 2 block segments
+        }
         for (int i = 0; i < 1000; i++)
         {
             Sprite f;
             f.addFrames(ren, "Img/brick",1);
-            int skip = rand()%10;
-            if (skip != 5){
+            if (stage1[i] != 0){
                 f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0, 50, 50);
-                bricks.push_back(f);}
+                bricks.push_back(f);
+            }
         }
         for (int i = 0; i < 10; i++)
         {
@@ -478,21 +484,21 @@ public:
                 rabbit.y = blockRect->y - rabbit.getH();
                 canJump = true;
             }
-			for (unsigned int i = 0; i < bricks.size(); i++)
-				{
-					bricks[i].show(ren, ticks);
-					bricks[i].update(dt);					
-					setCollision(floorRect, bricks[i]);
+        for (unsigned int i = 0; i < bricks.size(); i++)
+        {
+            bricks[i].show(ren, ticks);
+            bricks[i].update(dt);
+            setCollision(floorRect, bricks[i]);
 					//if(rabbit.side_collision(bricks[i])) rabbit.dx == bricks[i].dx;
 					//if(rabbit.bottom_collision(bricks[i]))
-					if(SDL_HasIntersection(rabRect, floorRect))
+            if(SDL_HasIntersection(rabRect, floorRect))
 					{
 						rabbit.dy = 0;
 						rabbit.y = floorRect->y - rabbit.getH();
 						canJump = true;
 					}
 				}
-			for (unsigned int i = 0; i < spikes.size(); i++)
+        for (unsigned int i = 0; i < spikes.size(); i++)
 			{
 				spikes[i].show(ren, ticks);
 				spikes[i].update(dt);
