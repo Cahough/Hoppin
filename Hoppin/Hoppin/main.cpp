@@ -7,7 +7,8 @@
 #include <math.h>
 #include <thread>
 #include <chrono>
-#include <SDL2_mixer/SDL_mixer.h>
+#include <cstdlib>
+#include <SDL2/SDL_mixer.h>
 
 using namespace std;
 const int MAXWIDTH = 640;
@@ -156,13 +157,12 @@ public:
     }
 };
 
-
 class Sprite : public Animation
 {
 public:
-    float x, dx, ax, y, dy, ay;
+    float x, dx, ax, y, dy, ay, w, h;
     
-    void set(float newX=0.0, float newY=0.0, float newDx=0.0, float newDy=0.0, float newAx=0.0, float newAy=0.0)
+    void set(float newX=0.0, float newY=0.0, float newDx=0.0, float newDy=0.0, float newAx=0.0, float newAy=0.0, float newW = 0.0, float newH = 0.0)
     {
         // position in pixels
         // speed in pixels per second
@@ -170,13 +170,12 @@ public:
         x = newX, y = newY;
         dx = newDx, dy = newDy;
         ax = newAx, ay = newAy;
+        w = newW, h = newH;
     }
-    
-    Sprite(float newX=0.0, float newY=0.0, float newDx=0.0, float newDy=0.0, float newAx=0.0, float newAy=0.0) : Animation()
+    Sprite(float newX=0.0, float newY=0.0, float newDx=0.0, float newDy=0.0, float newAx=0.0, float newAy=0.0, float newW = 0.0, float newH = 0.0) : Animation()
     {
         set(newX, newY, newDx, newDy, newAx, newAy);
     }
-    
     void addFrames(SDL_Renderer *ren, const char *imagePath, int count, int timePerFrame=100)
     {
         for (int i = 1; i <= count; i++)
@@ -186,29 +185,39 @@ public:
             addFrame(new AnimationFrame(ren, ss.str().c_str(), timePerFrame));
         }
     }
-    
-    void show (SDL_Renderer *ren, int time)
+    void show(SDL_Renderer *ren, int time)
     {
         Animation::show(ren, time, (int)x, (int)y);
     }
-    
+    /*virtual bool side_collision(Sprite object) //Trying to get individual side collison working
+    {
+		int left, oleft;
+		int right, oright;
+		int top;
+		int obottom;
+		left = x; right = x + w;
+		top = y;   
+		oleft = object.x; oright = object.x + object.w;
+		obottom = object.y + object.h;
+		return (!(top >= obottom || right <= oleft || left >= oright));
+	}
+	virtual bool bottom_collision(Sprite object)
+	{
+		int bottom = y + h;
+		int left = x;
+		int right = x + w;
+		int otop = object.y;
+		int oleft = object.x;
+		int oright = object.x + object.w;
+		if(bottom == otop) return true;
+		else return false;
+	}*/
     virtual void update(const float &dt)
     {
         x += dx*dt;
         y += dy*dt;
         dx += ax*dt;
         dy += ay*dt;
-    }
-};
-
-class BounceSprite:public Sprite
-{
-public:
-    virtual void update(const float &dt)
-    {
-        Sprite::update(dt);
-        //if (y < 315) dy = -dy;
-        if (y > 362) dy = 0; // Virtual "floor"
     }
 };
 
@@ -364,14 +373,8 @@ class HoppinGame:public Game
     Mix_Chunk *jumpSound;
     bool quitGame = false;
     Animation background;
-    vector<Sprite> birds;
-    vector<Sprite> spikes; //Temp: obstacles
-    vector<Sprite> bricks;
-    vector<Sprite> jumpBlocks;
-    Sprite cloud;
-    Sprite happyCloud;
-    Sprite us;
-    BounceSprite rabbit;
+    vector<Sprite> birds, spikes, bricks, jumpBlocks;
+    Sprite cloud, happyCloud, us, rabbit;
     SDL_Rect *rabRect = new SDL_Rect;
     SDL_Rect *spikeRect = new SDL_Rect;
     SDL_Rect *blockRect = new SDL_Rect;
@@ -401,10 +404,9 @@ public:
             f.addFrames(ren, "Img/brick",1);
             int skip = rand()%10;
             if (skip != 5){
-                f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0);
+                f.set(i*50, FLOOR_HEIGHT, -15.0, 0.0, 0.0, 0.0, 50, 50);
                 bricks.push_back(f);}
         }
-
         for (int i = 0; i < 10; i++)
         {
             Sprite b;
@@ -412,12 +414,8 @@ public:
             b.set(rand()%maxW, rand()%20, -20.0, 0.0, 0.0, 0.0);
             birds.push_back(b);
         }
-        
         rabbit.addFrames(ren, "Img/rabbit", 4);
-        rabbit.set(10.0, FLOOR_HEIGHT - rabbit.getH(), 0.0, 0.0, 0.0, 9.80 * pow(10, 2));
-
-        
-        
+        rabbit.set(10.0, FLOOR_HEIGHT - rabbit.getH(), 0.0, 0.0, 0.0, 9.80 * pow(10, 2), 34, 78);
         // Temp: Working on a "setInterval" equiv. to run a loop or function every x amount of time.
 //        chrono::seconds interval( 10 ) ; // 10 seconds
 //        for( int i = 0 ; i < 10 ; ++i )
@@ -445,78 +443,64 @@ public:
         {
             Sprite b;
             b.addFrames(ren, "Img/jumpblock", 1);
-            b.set(rand()%(1000*i-500) + 500, rand()%200 + 200, -150.0, 0.0, 0.0, 0.0);
+            b.set(rand()%(1000*i-500) + 500, rand()%200 + 200, -150.0, 0.0, 0.0, 0.0, 50, 20);
             jumpBlocks.push_back(b);
         }
-
     }
-    
-
     void show()
     {
-        backgroundParallax(20);
-        
+        backgroundParallax(20);       
         cloudParallax(40, cloud);
         cloudParallax(30, happyCloud);
-       // cloud.show(ren, ticks);
+        //cloud.show(ren, ticks);
         //happyCloud.show(ren, ticks);
-//        birds.show(ren, ticks);
-//        birds.update(dt);
+		//birds.show(ren, ticks);
+		//birds.update(dt);
         for (unsigned int i = 0; i < birds.size(); i++)
         {
             birds[i].show(ren, ticks);
             birds[i].update(dt);
         }
-
-        
         rabbit.show(ren, ticks);
         rabbit.update(dt);
-        
         //set rect properties for collision
-        
         setCollision(rabRect, rabbit);
         rabRect->y = rabbit.y + rabbit.getH() -5;
         rabRect->h = 5;                             //modified hitbox
-        
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
         {
             jumpBlocks[i].show(ren, ticks);
             jumpBlocks[i].update(dt);
-            
             setCollision(blockRect, jumpBlocks[i]);
-            if(SDL_HasIntersection(rabRect, blockRect)){
+            if(SDL_HasIntersection(rabRect, blockRect))
+            {
                 rabbit.dy = 0;
                 rabbit.y = blockRect->y - rabbit.getH();
                 canJump = true;
             }
-        for (unsigned int i = 0; i < bricks.size(); i++)
-            {
-                bricks[i].show(ren, ticks);
-                bricks[i].update(dt);
-                setCollision(floorRect, bricks[i]);
-                
-                if(SDL_HasIntersection(rabRect, floorRect)){
-                    rabbit.dy = 0;
-                    rabbit.y = floorRect->y - rabbit.getH();
-                    canJump = true;
-                }
-            }
-        
-        for (unsigned int i = 0; i < spikes.size(); i++)
-        {
-
-            spikes[i].show(ren, ticks);
-            spikes[i].update(dt);
-            setCollision(spikeRect, spikes[i]);
-            
-            if(SDL_HasIntersection(rabRect, spikeRect)){
-              death();
-          }
+			for (unsigned int i = 0; i < bricks.size(); i++)
+				{
+					bricks[i].show(ren, ticks);
+					bricks[i].update(dt);					
+					setCollision(floorRect, bricks[i]);
+					//if(rabbit.side_collision(bricks[i])) rabbit.dx == bricks[i].dx;
+					//if(rabbit.bottom_collision(bricks[i]))
+					if(SDL_HasIntersection(rabRect, floorRect))
+					{
+						rabbit.dy = 0;
+						rabbit.y = floorRect->y - rabbit.getH();
+						canJump = true;
+					}
+				}
+			for (unsigned int i = 0; i < spikes.size(); i++)
+			{
+				spikes[i].show(ren, ticks);
+				spikes[i].update(dt);
+				setCollision(spikeRect, spikes[i]);	
+				if(SDL_HasIntersection(rabRect, spikeRect)) death();
+			if(rabbit.y >= 480) death();
+			}
         }
-        }
-
-
-        
     }
     void setCollision(SDL_Rect *rect, Sprite s){
         rect->x=s.x;
@@ -531,7 +515,7 @@ public:
     }
     void cloudParallax(int rate, Sprite s){
         int cloudloc=-(ticks/rate)%640;
-        int r = rand()%50;
+        //int r = rand()%50;
         //cloud.y += r;
         
         s.Animation::show(ren,ticks,cloudloc + s.x,s.y);
@@ -554,7 +538,8 @@ public:
         {
             if (event.key.keysym.sym == SDLK_SPACE)
             {
-                if (rabbit.dy==0 || canJump){ // Make sure rabbit can't double bounce
+                if (rabbit.dy == 0 || canJump) // Make sure rabbit can't double bounce
+                {
                     rabbit.dy = -500.0;
                     canJump = false;
                     Mix_PlayChannel( -1, jumpSound, 0 );
@@ -562,14 +547,15 @@ public:
             }
             if (event.key.keysym.sym == SDLK_q)
             {
-                if ( canJump){
+                if (canJump)
+                {
                     rabbit.dy = -300.0;
                     canJump = false;
                 }
             }
         }
     }
-    virtual bool getExitStatus(){ return quitGame;}
+    virtual bool getExitStatus(){ return quitGame; }
     
     void done()
     {
@@ -578,22 +564,21 @@ public:
     }
 };
 
-
 int main(int argc, char **argv)
 {
     while (endGame == false)
     {
         StartGame s;
         HoppinGame g;
-        
         s.init();
         s.run();
         s.done();
-        g.init();
-        g.run();
-        g.done();
+		if (endGame == false)
+		{
+			g.init();
+			g.run();
+			g.done();
+		}
     }
-
-    
     return 0;
 }
