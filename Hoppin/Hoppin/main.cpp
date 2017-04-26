@@ -344,6 +344,10 @@ public:
                 if (event.type == SDL_KEYDOWN)
                 {
                     finished = true;
+                    if (event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        endGame = true;
+                    }
                 }
                 if (!finished) handleEvent(event);
             }
