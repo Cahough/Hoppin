@@ -8,7 +8,13 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
+
+// If Windows
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <SDL2/SDL_mixer.h>
+#else
+#include <SDL2_mixer/SDL_mixer.h>
+#endif
 
 using namespace std;
 const int MAXWIDTH = 640;
