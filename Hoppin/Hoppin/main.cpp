@@ -462,7 +462,7 @@ public:
             if(!spikes.empty())
             {
 				randnum2 = rand()%(1000*i-500) + 500;
-				if(randnum2 > randnum1)
+				if(randnum2 > randnum1 + 50)
 				{
 					s.addFrames(ren, "Img/spikes", 1);
 					s.set(randnum2, 420.0, -15.0, 0.0, 0.0, 0.0);
