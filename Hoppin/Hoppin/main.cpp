@@ -353,7 +353,7 @@ public:
                 }
                 if (!finished) handleEvent(event);
             }
-            //            ticks = SDL_GetTicks();
+                        ticks = SDL_GetTicks();
             //            dt = (float) (ticks-oldTicks)/1000.0; // s
             //            oldTicks = ticks;
             //            SDL_RenderClear(ren);
