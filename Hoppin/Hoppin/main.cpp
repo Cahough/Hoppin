@@ -468,11 +468,7 @@ public:
         happyCloud.addFrames(ren, "Img/happycloud", 1);
         happyCloud.set(rand()%50+350.0, rand()%20+20.0);
         Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ); //probably needs to be moved to media manager
-        
-        jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );
-        
-        //        birds.addFrames(ren, "Img/bird", 4);
-        //        birds.set(rand()%maxW, 5.0, -20.0, 0.0, 0.0, 0.0);
+        jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );    
         for (int i=0; i < 1000; i+=2)
         {
             int ran = rand()%10;
@@ -513,7 +509,7 @@ public:
             if(!spikes.empty())
             {
                 randnum2 = rand()%(1000*i-500) + 500;
-                if(randnum2 > randnum1)
+                if(randnum2 > randnum1 + 100)
                 {
                     s.addFrames(ren, "Img/spikes", 1);
                     s.set(randnum2, 420.0, -150.0, 0.0, 0.0, 0.0);
@@ -532,12 +528,8 @@ public:
     void show(int ticks)
     {
         backgroundParallax(20);
-        cloudParallax(40, cloud);
+        cloudParallax(30, cloud);
         cloudParallax(30, happyCloud);
-        //cloud.show(ren, ticks);
-        //happyCloud.show(ren, ticks);
-        //birds.show(ren, ticks);
-        //birds.update(dt);
         for (unsigned int i = 0; i < birds.size(); i++)
         {
             birds[i].show(ren, ticks);
@@ -565,8 +557,6 @@ public:
                 bricks[i].show(ren, ticks);
                 bricks[i].update(dt);
                 setCollision(floorRect, bricks[i]);
-                //if(rabbit.side_collision(bricks[i])) rabbit.dx == bricks[i].dx;
-                //if(rabbit.bottom_collision(bricks[i]))
                 if(SDL_HasIntersection(rabRect, floorRect))
                 {
                     rabbit.dy = 0;
@@ -595,6 +585,7 @@ public:
         for (unsigned int i = 0; i < birds.size(); i++)
         {
             birds[i].update(dt);
+            if (birds[i].x < -birds[i].getW()) birds[i].x = MAXWIDTH;
         }
         
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
@@ -626,18 +617,8 @@ public:
     }
     void cloudParallax(int rate, Sprite s){
         int cloudloc=-(ticks/rate)%640;
-        //int r = rand()%50;
-        //cloud.y += r;
-        
         s.Animation::show(ren,ticks,cloudloc + s.x,s.y);
         s.Animation::show(ren,ticks,cloudloc+640 + s.x,s.y);
-        
-        //        if (r<10){
-        //            happyCloud.Animation::show(ren,ticks,cloudloc,cloud.y + r);
-        //            happyCloud.Animation::show(ren,ticks,cloudloc+640,cloud.y+r);
-        //        }
-        // if(happyCloud.x < -happyCloud.getW()) happyCloud.x=640;
-        // happyCloud.Animation::show(ren,ticks,cloudloc+happyCloud.x,happyCloud.y);
     }
     
     void death(){
@@ -698,4 +679,3 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-
