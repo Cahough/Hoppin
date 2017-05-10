@@ -354,19 +354,10 @@ public:
                 if (!finished) handleEvent(event);
             }
                         ticks = SDL_GetTicks();
-            //            dt = (float) (ticks-oldTicks)/1000.0; // s
-            //            oldTicks = ticks;
-            //            SDL_RenderClear(ren);
-            //            show();
-            //            SDL_RenderPresent(ren);
         }
         SDL_WaitThread(renderThread, &result);
         SDL_WaitThread(updateThread, &result);
-        //        int end = SDL_GetTicks();
-        //        cout << "FPS: " << (300.0*1000.0/float(end-start)) << endl;
     }
-    //    virtual void show() = 0;
-    //    virtual void handleEvent(SDL_Event &event) = 0;
     virtual void update(float dt) = 0;
     virtual void show(int ticks) = 0;
     virtual void handleEvent(SDL_Event &event) = 0;
@@ -485,10 +476,9 @@ public:
                 bricks.push_back(f);
             }
         }
-        Sprite b;
         for (int i = 0; i < 10; i++)
         {
-            //Sprite b;
+            Sprite b;
             b.addFrames(ren, "Img/bird", 4);
             b.set(rand()%maxW, rand()%20, -20.0, 0.0, 0.0, 0.0);
             birds.push_back(b);
@@ -496,7 +486,6 @@ public:
         rabbit.addFrames(ren, "Img/rabbit", 4);
         rabbit.set(10.0, FLOOR_HEIGHT - rabbit.getH(), 0.0, 0.0, 0.0, 9.80 * pow(10, 2), 34, 78);
         
-        // Temp: Obstacles
         int randnum1 = rand()%(640);
         int randnum2 = randnum1;
         Sprite s;
@@ -538,10 +527,11 @@ public:
         }
         rabbit.show(ren, ticks);
         rabbit.update(dt);
+        
         //set rect properties for collision
         setCollision(rabRect, rabbit);
         rabRect->y = rabbit.y + rabbit.getH() -5;
-        rabRect->h = 5;                             //modified hitbox
+        rabRect->h = 5; //modified hitbox
         for (unsigned int i = 0; i < jumpBlocks.size(); i++)
         {
             jumpBlocks[i].show(ren, ticks);
