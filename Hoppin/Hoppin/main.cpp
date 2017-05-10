@@ -468,7 +468,8 @@ public:
         happyCloud.addFrames(ren, "Img/happycloud", 1);
         happyCloud.set(rand()%50+350.0, rand()%20+20.0);
         Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ); //probably needs to be moved to media manager
-        jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );    
+        jumpSound = Mix_LoadWAV( "/audio/jumpsound.wav" );
+        
         for (int i=0; i < 1000; i+=2)
         {
             int ran = rand()%10;
@@ -636,7 +637,7 @@ public:
                 {
                     rabbit.dy = -500.0;
                     canJump = false;
-                    Mix_PlayChannel( -1, jumpSound, 0 );
+                    Mix_PlayChannel( -1, jumpSound, 0);
                 }
             }
             if (event.key.keysym.sym == SDLK_q)
@@ -653,6 +654,8 @@ public:
     
     void done()
     {
+        Mix_FreeChunk( jumpSound );
+        Mix_CloseAudio();
         background.destroy();
         Game::done();
     }
