@@ -299,7 +299,6 @@ public:
     
     void updateGame()
     {
-        cout << "updateGame" << endl;
         int oldTicks=SDL_GetTicks();
         while(!finished)
         {
@@ -327,7 +326,6 @@ public:
         int result;
         updateThread=SDL_CreateThread(updateGame, "Update", this);
         renderThread=SDL_CreateThread(renderGame, "Render", this);
-        cout << "Testing" << endl;
         while (!finished)
         {
             SDL_Event event;
@@ -615,10 +613,8 @@ public:
     }
     void handleEvent(SDL_Event &event)
     {
-        cout << "handleEvent" << endl;
         if (event.type == SDL_KEYDOWN)
         {
-            cout << "handleEvent KeyDown" << endl;
             if (event.key.keysym.sym == SDLK_SPACE)
             {
                 if (rabbit.dy == 0 || canJump) // Make sure rabbit can't double bounce
