@@ -323,8 +323,6 @@ public:
     
     virtual void run()
     {
-        int start = SDL_GetTicks();
-        int oldTicks = start;
         finished = false;
         int result;
         updateThread=SDL_CreateThread(updateGame, "Update", this);
